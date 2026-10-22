@@ -29,6 +29,8 @@
 | dashboard-ui | 기본 대시보드 UI | [기획](planning/dashboard-ui.md) | [계획](plans/dashboard-ui.md) | [기능 문서](features/dashboard-ui.md) | 완료 |
 | admin-auth | 로그인 및 관리자 관리·Supabase 연결 | [기획](planning/admin-auth.md) | [계획](plans/admin-auth.md) | [기능 문서](features/admin-auth.md) | 완료 |
 | staff-delete | 서브관리자 삭제 | [기획](planning/staff-delete.md) | [계획](plans/staff-delete.md) | [직원 관리](features/admin-auth.md) | 완료 |
+| staff-ui | 관리자 관리 UI 개선 | [기획](planning/staff-ui.md) | [계획](plans/staff-ui.md) | [직원 관리](features/admin-auth.md) | 완료 |
+| loading-staff-controls | 로딩·직원 목록 조작 개선 | [기획](planning/loading-staff-controls.md) | [계획](plans/loading-staff-controls.md) | [직원 관리](features/admin-auth.md) · [대시보드](features/dashboard-ui.md) | 완료 |
 
 현재 공통 기반은 [시스템 구조](architecture/system.md)에 기록되어 있습니다.
 
@@ -37,7 +39,3 @@ Supabase 프로젝트와 로컬 환경 설정·검증 범위는 [Supabase 연결
 단일 지점의 직원·회원 기본정보 구조는 [ERD](architecture/erd.md)에 정리합니다. 상품·결제는 추후 범위이며 staff 테이블만 생성했습니다.
 
 UI 작업 시 [UI 공통 가이드](architecture/ui-guide.md)의 색상·크기·간격·상태 기준을 따릅니다.
-
-관리자 관리 UI 개선: [기획](planning/staff-ui.md) · [작업계획](plans/staff-ui.md) — 구현·검증·리뷰 완료, 완료.
-
-로딩·직원 목록 조작 후속 요청: [확정 기획](planning/loading-staff-controls.md) · [작업계획](plans/loading-staff-controls.md) — 구현·검증·리뷰 완료, 완료.
