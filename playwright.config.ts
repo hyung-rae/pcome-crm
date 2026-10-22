@@ -4,6 +4,7 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:8888";
 
 export default defineConfig({
   testDir: "./tests",
+  testIgnore: "**/password-validation.spec.ts",
   fullyParallel: true,
   use: { baseURL, trace: "retain-on-failure" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],

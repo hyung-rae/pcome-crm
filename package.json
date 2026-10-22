@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:unit": "playwright test --config=playwright.unit.config.ts"
   },
   "dependencies": {
     "@mantine/core": "^9.7.3",

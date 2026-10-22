@@ -5,3 +5,5 @@
 [전체 문서 색인](../README.md) · [문서 관리 절차](../workflow.md)
 
 - [기본 대시보드 UI](dashboard-ui.md) — 완료
+
+- [검증 비용 개선](verification-efficiency.md) — 완료
