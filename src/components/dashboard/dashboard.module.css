@@ -297,6 +297,8 @@
   --primary: #d63e20;
   background: #1d1d1d;
   color: white;
+  /* Thin scrollbar tuned for the charcoal background. */
+  scrollbar-color: #4a4a4a transparent;
   display: flex;
   flex-direction: column;
 }

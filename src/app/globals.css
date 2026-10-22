@@ -10,3 +10,26 @@ body {
   margin: 0;
   background: var(--mantine-color-body);
 }
+
+/* Thin, quiet scrollbars across the app. Standard properties cover Chromium 121+ and Firefox;
+   the WebKit pseudo-elements cover browsers without scrollbar-color (e.g. Safari). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c4c4c9 transparent;
+}
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #c4c4c9;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8ae;
+  }
+}
