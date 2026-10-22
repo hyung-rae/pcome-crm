@@ -1,0 +1,587 @@
+.shell {
+  --brand: #f25634;
+  --primary: #d63e20;
+  --canvas: #f7f7f8;
+  --ink: #28262b;
+  height: 100dvh;
+  padding: 0;
+  background: #333;
+  color: var(--ink);
+}
+.sidebar {
+  transition: width 200ms ease;
+  position: absolute;
+  inset: 48px auto 0 0;
+  width: 248px;
+  background: #1d1d1d;
+  color: white;
+  padding: 36px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  min-width: 0;
+}
+.brandMark {
+  background: var(--brand);
+  width: 28px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-content: center;
+  font-size: 23px;
+  font-weight: 900;
+  position: relative;
+  border-radius: 9px 9px 9px 2px;
+  color: #1d1d1d;
+}
+.brandMark > span {
+  position: absolute;
+  right: 5px;
+  top: -3px;
+  color: white;
+}
+.brand strong {
+  font-size: 16px;
+  letter-spacing: -0.6px;
+}
+.brand strong span {
+  font-weight: 400;
+  color: #c4c4c4;
+}
+.brand small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-top: 4px;
+}
+.navigation {
+  margin-top: 32px;
+}
+.navLabel {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: #a6a6a6;
+  padding: 0 16px;
+  margin-bottom: 17px;
+}
+.navigation a,
+.navigation button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  text-align: left;
+}
+.active {
+  background: #fff0eb;
+  color: #a82e18;
+  font-weight: 700;
+}
+.activeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d63e20;
+  margin-left: auto;
+}
+.navigation button {
+  margin-top: 8px;
+  background: transparent;
+  color: #aaa;
+  cursor: not-allowed;
+}
+.navigation button small {
+  font-size: 10px;
+  margin-left: auto;
+  color: #bbb;
+  background: #333;
+  padding: 2px 5px;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+.sidebarFooter {
+  margin-top: auto;
+  padding: 20px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footerLine {
+  height: 2px;
+  width: 24px;
+  background: var(--brand);
+  margin-bottom: 6px;
+}
+.sidebarFooter strong {
+  font-size: 11px;
+  font-weight: 500;
+  color: #d0d0d0;
+}
+.sidebarFooter > span:last-child {
+  font-size: 10px;
+  color: #a6a6a6;
+}
+.workspace {
+  margin-left: 248px;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  background: var(--canvas);
+  border-radius: 12px 0 0 0;
+  transition: margin-left 200ms ease;
+}
+.header {
+  height: 80px;
+  background: white;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 44px;
+  gap: 16px;
+  font-size: 13px;
+}
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.breadcrumb {
+  color: #666;
+}
+.slash {
+  color: #aaa;
+}
+.headerBrand {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.headerBrand span {
+  color: #666;
+  font-size: 9px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+.menuButton {
+  display: none;
+  border: 1px solid #858585;
+  background: transparent;
+  border-radius: 7px;
+  padding: 7px;
+  color: white;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.main {
+  padding: 48px 44px 24px;
+  max-width: 1512px;
+  margin: auto;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #b7371c;
+  margin: 0 0 12px;
+}
+.pageHeading h1 {
+  font-size: 34px;
+  letter-spacing: -1.5px;
+  margin: 0;
+  font-weight: 750;
+  line-height: 1.4;
+}
+.pageHeading h1 span {
+  color: var(--brand);
+  margin-left: 3px;
+}
+.description {
+  font-size: 14px;
+  color: #565656;
+  margin: 12px 0 0;
+  line-height: 1.8;
+}
+.overview {
+  margin-top: 34px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 3px 10px #28262b02;
+}
+.sectionHeader {
+  padding: 25px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+}
+.sectionHeader h2 {
+  font-size: 16px;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+.sectionHeader p {
+  font-size: 12px;
+  color: #565656;
+  margin: 7px 0 0;
+  line-height: 1.6;
+}
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  padding: 6px 9px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  color: #565656;
+}
+.badge > span {
+  width: 5px;
+  height: 5px;
+  background: #777;
+  border-radius: 50%;
+}
+.empty {
+  min-height: 350px;
+  padding: 65px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.emptyIcon {
+  width: 56px;
+  height: 56px;
+  background: #fff0eb;
+  color: var(--primary);
+  display: grid;
+  place-content: center;
+  border-radius: 15px;
+  margin-bottom: 23px;
+  border: 1px solid #f9dcd2;
+}
+.empty h3 {
+  font-size: 18px;
+  letter-spacing: -0.5px;
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+.empty p {
+  font-size: 13px;
+  color: #565656;
+  line-height: 1.8;
+  margin: 0;
+}
+.emptyNote {
+  font-size: 11px;
+  color: #686868;
+  margin-top: 20px;
+}
+.panelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #fcfcfc;
+  border-top: 1px solid #eee;
+  padding: 15px 20px;
+  font-size: 11px;
+  color: #565656;
+  text-align: center;
+}
+.footerDot {
+  width: 4px;
+  height: 4px;
+  background: #d63e20;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pageFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 10px;
+  color: #686868;
+  margin-top: 28px;
+}
+.drawer {
+  --brand: #f25634;
+  --primary: #d63e20;
+  background: #1d1d1d;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+.drawerHeader {
+  background: #1d1d1d;
+  color: white;
+}
+.drawerHeader button {
+  color: white;
+}
+.drawerHeader button:hover,
+.drawerHeader button:active {
+  background-color: #333;
+  color: white;
+}
+.drawer nav {
+  margin-top: 36px;
+}
+.drawer .sidebarFooter {
+  margin-top: 50px;
+}
+.skipLink {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  transform: translateY(-200%);
+  z-index: 1000;
+  background: white;
+  color: #a82e18;
+  padding: 12px;
+  border-radius: 6px;
+}
+.skipLink:focus {
+  transform: translateY(0);
+}
+.shell :is(a, button):focus-visible,
+.drawer :is(a, button):focus-visible {
+  outline: 3px solid #d63e20;
+  outline-offset: 4px;
+}
+@media (max-width: 991px) {
+  .sidebar {
+    display: none;
+  }
+  .workspace {
+    margin-left: 0;
+    transition: none;
+  }
+  .menuButton {
+    display: flex;
+  }
+  .header {
+    height: 72px;
+    padding: 0 28px;
+  }
+  .main {
+    padding: 36px 28px 24px;
+  }
+}
+@media (max-width: 575px) {
+  .header {
+    height: 66px;
+    padding: 0 20px;
+  }
+  .headerLeft {
+    gap: 10px;
+  }
+  .headerBrand {
+    display: none;
+  }
+  .breadcrumb,
+  .slash {
+    display: none;
+  }
+  .main {
+    padding: 30px 20px 24px;
+  }
+  .pageHeading h1 {
+    font-size: 29px;
+  }
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.4px;
+  }
+  .description {
+    font-size: 13px;
+    max-width: 260px;
+  }
+  .overview {
+    margin-top: 26px;
+  }
+  .sectionHeader {
+    padding: 21px 20px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .sectionHeader h2 {
+    font-size: 15px;
+  }
+  .empty {
+    padding: 44px 20px;
+    min-height: 320px;
+  }
+  .empty h3 {
+    font-size: 16px;
+    max-width: 240px;
+  }
+  .empty p {
+    font-size: 12px;
+    max-width: 230px;
+  }
+  .emptyNote {
+    font-size: 10px;
+  }
+  .panelFooter {
+    font-size: 10px;
+    padding: 14px 12px;
+  }
+  .pageFooter {
+    font-size: 9px;
+  }
+  .brand {
+    padding-top: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+.disabledItem {
+  display: block;
+}
+.lnbHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.collapseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #696969;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px;
+}
+.collapseButton:hover {
+  background: #333;
+  color: white;
+}
+.navigation svg {
+  flex-shrink: 0;
+}
+.drawer .navigation a,
+.drawer .navigation button {
+  min-height: 44px;
+}
+.collapsed .sidebar {
+  width: 88px;
+  padding-inline: 16px;
+}
+.collapsed .workspace {
+  margin-left: 88px;
+}
+.collapsed .sidebar .brand {
+  padding: 0;
+  justify-content: center;
+}
+.collapsed .sidebar .brand > div,
+.collapsed .sidebar .navLabel,
+.collapsed .sidebar .navText,
+.collapsed .sidebar .activeDot,
+.collapsed .sidebar .navigation small,
+.collapsed .sidebar .sidebarFooter {
+  display: none;
+}
+.collapsed .sidebar .navigation {
+  margin-top: 32px;
+}
+.collapsed .sidebar .navigation a,
+.collapsed .sidebar .navigation button {
+  justify-content: center;
+  padding: 10px 0;
+}
+.collapsed .collapseButton svg {
+  transform: rotate(180deg);
+}
+.collapseButton svg {
+  transition: transform 200ms ease;
+}
+@media (max-width: 991px) {
+  .collapsed .workspace {
+    margin-left: 0;
+  }
+}
+
+.appFrame {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  padding-top: 48px;
+  border: 0;
+  border-radius: 0;
+  background: #1d1d1d;
+}
+.appBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  background: #333;
+  border-bottom: 1px solid #454545;
+  border-radius: 0;
+  z-index: 20;
+}
+.appTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.appTitle span {
+  font-weight: 400;
+  color: #ccc;
+}
+.appCaption {
+  margin-left: auto;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #ccc;
+}
+.appBar .menuButton:hover {
+  background: #444;
+}
+@media (max-width: 991px) {
+  .desktopToggle {
+    display: none;
+  }
+  .workspace {
+    border-radius: 0;
+  }
+}

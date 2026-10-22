@@ -16,7 +16,8 @@ npm ci
 npm run dev
 ```
 
-http://localhost:3000 에서 확인합니다.
+http://localhost:3000 에서 대시보드를 확인합니다.
+PC LNB는 공통 상단바의 아이콘 버튼으로 접고 펼치며, 작은 화면에서는 상단 메뉴 버튼으로 엽니다.
 
 ## 검증 및 배포 빌드
 
@@ -30,7 +31,8 @@ npm start
 ## 주요 파일
 
 - `src/app/layout.tsx`: 전역 스타일 및 Mantine Provider
-- `src/app/page.tsx`: 시작 페이지
+- `src/app/page.tsx`: 대시보드 진입
+- `src/components/dashboard/`: 대시보드 레이아웃과 반응형 스타일
 - `src/theme.ts`: Mantine 테마
 - `src/app/globals.css`: 전역 CSS
 - `postcss.config.cjs`: Mantine PostCSS 설정
@@ -51,3 +53,18 @@ high 경고 5건이 확인되었습니다. 제안된 자동 수정은 `eslint-co
 
 기능 기획, 작업계획 및 구현 현황은 [문서 색인](docs/README.md)에서 확인합니다.
 작업은 기획·완료 기준 확정 → 작업계획·테스트 시나리오 확정 → 개발 → 자동 테스트 → 실제 브라우저 검증 → 코드 리뷰 → 문서 반영 → 사용자 확인 → 커밋 대상 최종 리뷰 → 커밋 순서로 진행합니다.
+
+## UI 자동 테스트
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
+
+기본적으로 Webpack 개발 서버를 8888 포트에 실행합니다. 이미 다른 포트에 프로젝트 서버가 있다면 재사용합니다.
+
+```sh
+PLAYWRIGHT_BASE_URL=http://localhost:3002 npm run test:e2e
+```
+
+Chromium에서 빈 상태, 1440·768·390px 반응형, PC LNB 접기·펼치기, 모바일 메뉴·포커스, 브랜드 색상 및 콘솔·네트워크 오류를 검증합니다.

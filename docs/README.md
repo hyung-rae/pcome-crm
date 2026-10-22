@@ -22,9 +22,12 @@
 
 ## 기능 목록
 
-아직 구현된 업무 기능은 없습니다. 새 기능을 시작하면 아래 표에 같은 기능 ID의 문서를 연결합니다.
+구현된 UI와 진행 중인 기능의 관련 문서를 아래에 연결합니다. 업무 데이터 연동 기능은 아직 없습니다.
 
 | 기능 ID | 기능 | 기획 | 작업계획 | 현재 기능 문서 | 상태 |
 |---|---|---|---|---|---|
+| dashboard-ui | 기본 대시보드 UI | [기획](planning/dashboard-ui.md) | [계획](plans/dashboard-ui.md) | [기능 문서](features/dashboard-ui.md) | 완료 |
 
 현재 공통 기반은 [시스템 구조](architecture/system.md)에 기록되어 있습니다.
+
+UI 작업 시 [UI 공통 가이드](architecture/ui-guide.md)의 색상·크기·간격·상태 기준을 따릅니다.
