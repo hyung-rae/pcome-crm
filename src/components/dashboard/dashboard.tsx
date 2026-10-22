@@ -131,10 +131,12 @@ function Navigation({
 export function Dashboard({
   staff,
   title = "대시보드",
+  description = "업무의 시작부터 다음 단계까지, 한곳에서 관리하세요.",
   children,
 }: {
   staff: Staff;
   title?: string;
+  description?: string;
   children?: ReactNode;
 }) {
   const [opened, setOpened] = useState(false);
@@ -218,28 +220,16 @@ export function Dashboard({
           />
         </Drawer>
         <div className={styles.workspace}>
-          <header className={styles.header}>
-            <div className={styles.headerLeft}>
-              <span className={styles.breadcrumb}>워크스페이스</span>
-              <span className={styles.slash}>/</span>
-              <span>{title}</span>
-            </div>
-          </header>
           <main id="main-content" className={styles.main} tabIndex={-1}>
             <div className={styles.pageHeading}>
-              <p className={styles.eyebrow}>YOUR WORKSPACE, AT A GLANCE</p>
               <h1>
                 {title}
                 <span>.</span>
               </h1>
-              <p className={styles.description}>
-                {children
-                  ? "직원 계정과 접근 권한을 관리하세요."
-                  : "업무의 시작부터 다음 단계까지, 한곳에서 관리하세요."}
-              </p>
+              <p className={styles.description}>{description}</p>
             </div>
             {children ? (
-              <div style={{ marginTop: 30 }}>{children}</div>
+              <div style={{ marginTop: 16 }}>{children}</div>
             ) : (
               <section
                 className={styles.overview}

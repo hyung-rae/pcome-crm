@@ -143,39 +143,6 @@
   border-radius: 12px 0 0 0;
   transition: margin-left 200ms ease;
 }
-.header {
-  height: 80px;
-  background: white;
-  border-bottom: 1px solid #e8e8e8;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 44px;
-  gap: 16px;
-  font-size: 13px;
-}
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.breadcrumb {
-  color: #666;
-}
-.slash {
-  color: #aaa;
-}
-.headerBrand {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-.headerBrand span {
-  color: #666;
-  font-size: 9px;
-  font-weight: 400;
-  margin-left: 5px;
-}
 .menuButton {
   display: none;
   border: 1px solid #858585;
@@ -188,36 +155,37 @@
   justify-content: center;
 }
 .main {
-  padding: 48px 44px 24px;
+  padding: 24px;
   max-width: 1512px;
   margin: auto;
 }
-.eyebrow {
-  font-size: 10px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #b7371c;
-  margin: 0 0 12px;
+/* Title and description share one line to keep the work area tall; they wrap on narrow screens. */
+.pageHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 12px;
+  row-gap: 2px;
 }
 .pageHeading h1 {
-  font-size: 34px;
-  letter-spacing: -1.5px;
+  font-size: 22px;
+  letter-spacing: -0.5px;
   margin: 0;
   font-weight: 750;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 .pageHeading h1 span {
   color: var(--brand);
   margin-left: 3px;
 }
 .description {
-  font-size: 14px;
+  font-size: 13px;
   color: #565656;
-  margin: 12px 0 0;
-  line-height: 1.8;
+  margin: 0;
+  line-height: 1.5;
 }
 .overview {
-  margin-top: 34px;
+  margin-top: 16px;
   border: 1px solid #e8e8e8;
   border-radius: 12px;
   background: white;
@@ -380,45 +348,19 @@
   .menuButton {
     display: flex;
   }
-  .header {
-    height: 72px;
-    padding: 0 28px;
-  }
   .main {
-    padding: 36px 28px 24px;
+    padding: 20px 20px 24px;
   }
 }
 @media (max-width: 575px) {
-  .header {
-    height: 66px;
-    padding: 0 20px;
-  }
-  .headerLeft {
-    gap: 10px;
-  }
-  .headerBrand {
-    display: none;
-  }
-  .breadcrumb,
-  .slash {
-    display: none;
-  }
   .main {
-    padding: 30px 20px 24px;
+    padding: 16px 16px 24px;
   }
   .pageHeading h1 {
-    font-size: 29px;
-  }
-  .eyebrow {
-    font-size: 9px;
-    letter-spacing: 1.4px;
+    font-size: 20px;
   }
   .description {
-    font-size: 13px;
-    max-width: 260px;
-  }
-  .overview {
-    margin-top: 26px;
+    font-size: 12px;
   }
   .sectionHeader {
     padding: 21px 20px;

@@ -189,16 +189,16 @@ test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된�
   const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
   const before = await bar.boundingBox();
   const lnb = await page.locator("#desktop-lnb").boundingBox();
-  const contentHeader = await page.getByRole("banner").last().boundingBox();
+  // The content area starts right below the app bar (no inner header).
+  const content = await page.getByRole("main").boundingBox();
   expect(Math.abs(before!.y + before!.height - lnb!.y)).toBeLessThan(1);
-  expect(Math.abs(before!.y + before!.height - contentHeader!.y)).toBeLessThan(
-    1,
-  );
+  expect(Math.abs(before!.y + before!.height - content!.y)).toBeLessThan(1);
+  await expect(page.getByRole("banner")).toHaveCount(1);
   await page.getByRole("main").hover();
   await page.mouse.wheel(0, 500);
   await expect
     .poll(async () => (await page.getByRole("main").boundingBox())!.y)
-    .toBeLessThan(contentHeader!.y);
+    .toBeLessThan(content!.y);
   expect(await bar.boundingBox()).toEqual(before);
   expect(
     await page.evaluate(
