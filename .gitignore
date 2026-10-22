@@ -50,3 +50,6 @@ next-env.d.ts
 /.archify/
 
 !.env.example
+
+# oh-my-claudecode
+.omc/
