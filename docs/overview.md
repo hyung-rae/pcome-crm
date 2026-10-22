@@ -11,6 +11,7 @@ PCOME CRM 웹앱의 개발 기반을 구성한 상태입니다. 구체적인 업
 - Next.js App Router + TypeScript
 - Mantine 공통 Provider, 브랜드 오렌지 테마, 반응형 대시보드 빈 상태
 - 차콜 앱 프레임·공통 상단바와 고정 토글, PC LNB 및 모바일 Drawer 메뉴
+- 헤더 우측 GitHub 저장소 링크, 브랜드 P 파비콘
 - 작은 버튼 패딩·16px 메뉴 아이콘, 닫기 버튼 hover 대비
 - [UI 공통 가이드](architecture/ui-guide.md): 현재 대시보드를 이후 UI의 색상·크기·간격 기준으로 사용
 - LNB 200ms 전환 애니메이션·동작 줄이기 설정 지원
@@ -29,7 +30,7 @@ PCOME CRM 웹앱의 개발 기반을 구성한 상태입니다. 구체적인 업
 
 ## 검증 현황과 알려진 제한
 
-대시보드의 Chromium E2E 11개, 린트, 타입 검사 및 Webpack 빌드를 통과했습니다. Turbopack 빌드는 내부 포트 생성 권한 제한으로 실패했습니다. 검증 결과·수정 이력은 [작업계획](plans/dashboard-ui.md)에 기록합니다.
+대시보드의 Chromium E2E 12개, 린트, 타입 검사 및 Webpack 빌드를 통과했습니다. Turbopack 빌드는 내부 포트 생성 권한 제한으로 실패했습니다. 검증 결과·수정 이력은 [작업계획](plans/dashboard-ui.md)에 기록합니다.
 
 초기 구성 시 린트, 타입 검사 및 Webpack 빌드를 통과했습니다.
 Turbopack 빌드는 당시 실행 환경의 내부 포트 생성 제한으로 실패했습니다.

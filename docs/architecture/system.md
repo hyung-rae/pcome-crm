@@ -13,6 +13,7 @@ Next.js App Router와 TypeScript를 사용합니다. UI는 Mantine이며 PostCSS
 | 경로 | 책임 |
 |---|---|
 | `src/app/layout.tsx` | 한국어 HTML, 메타데이터, Mantine 스타일·Provider·색상 스크립트 |
+| `src/app/icon.svg`, `src/app/favicon.ico` | 브랜드 P 파비콘(SVG·ICO), Next.js 자동 메타데이터 |
 | `src/app/page.tsx` | `/` 대시보드 진입 |
 | `src/components/dashboard/` | 공통 레이아웃, PC LNB 접기·펼치기, 모바일 Drawer, 빈 상태 및 CSS Modules |
 | `tests/dashboard.spec.ts`, `playwright.config.ts` | Chromium E2E 검증 |

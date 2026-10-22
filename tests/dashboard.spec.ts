@@ -104,6 +104,14 @@ test("PC LNB 접기·펼치기로 본문이 넓어지고 메뉴 이름은 유지
     .boundingBox();
   expect(expandButton!.x).toBe(toggle!.x);
   expect(expandButton!.y).toBe(toggle!.y);
+  const lnbBox = (await page.locator("#desktop-lnb").boundingBox())!;
+  const logoBox = (await page.locator('#desktop-lnb [aria-hidden="true"]').filter({ hasText: "P" }).boundingBox())!;
+  expect(Math.abs(logoBox.x + logoBox.width / 2 - (lnbBox.x + lnbBox.width / 2))).toBeLessThan(1);
+  for (const item of [page.getByRole("link", { name: "대시보드" }), page.getByRole("button", { name: "관리자 관리 준비 중" })]) {
+    const box = (await item.boundingBox())!;
+    expect(box.width).toBe(box.height);
+    expect(Math.abs(box.x + box.width / 2 - (lnbBox.x + lnbBox.width / 2))).toBeLessThan(1);
+  }
   const after = await main.boundingBox();
   expect(after!.width).toBeGreaterThan(before!.width);
   await page.getByRole("link", { name: "대시보드" }).hover();
@@ -178,4 +186,21 @@ test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된�
   await expect.poll(async () => (await page.getByRole("main").boundingBox())!.y).toBeLessThan(contentHeader!.y);
   expect(await bar.boundingBox()).toEqual(before);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight)).toBe(true);
+});
+
+test("헤더 우측 GitHub 링크와 브랜드 파비콘을 제공한다", async ({ page, request }) => {
+  await page.goto("/");
+  const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
+  const github = bar.getByRole("link", { name: "GitHub 저장소 열기 (새 탭)" });
+  await expect(github).toHaveAttribute("href", "https://github.com/hyung-rae/pcome-crm");
+  await expect(github).toHaveAttribute("target", "_blank");
+  const box = await github.boundingBox();
+  const header = await bar.boundingBox();
+  expect(header!.x + header!.width - box!.x - box!.width).toBeLessThanOrEqual(17);
+  const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
+  await expect(icon).toHaveCount(1);
+  const response = await request.get((await icon.getAttribute("href"))!);
+  expect(response.ok()).toBe(true);
+  expect(await response.text()).toContain("#F25634");
+  expect((await request.get('/favicon.ico')).ok()).toBe(true);
 });

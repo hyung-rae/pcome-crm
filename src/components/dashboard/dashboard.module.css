@@ -15,7 +15,7 @@
   width: 248px;
   background: #1d1d1d;
   color: white;
-  padding: 36px 20px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   z-index: 10;
@@ -62,7 +62,7 @@
   margin-top: 4px;
 }
 .navigation {
-  margin-top: 32px;
+  margin-top: 24px;
 }
 .navLabel {
   font-size: 10px;
@@ -503,6 +503,7 @@
   margin-left: 88px;
 }
 .collapsed .sidebar .brand {
+  width: 100%;
   padding: 0;
   justify-content: center;
 }
@@ -515,12 +516,15 @@
   display: none;
 }
 .collapsed .sidebar .navigation {
-  margin-top: 32px;
+  margin-top: 24px;
 }
 .collapsed .sidebar .navigation a,
 .collapsed .sidebar .navigation button {
+  width: 36px;
+  height: 36px;
+  margin-inline: auto;
   justify-content: center;
-  padding: 10px 0;
+  padding: 10px;
 }
 .collapsed .collapseButton svg {
   transform: rotate(180deg);
@@ -554,8 +558,7 @@
   align-items: center;
   gap: 12px;
   color: white;
-  background: #333;
-  border-bottom: 1px solid #454545;
+  background: #1d1d1d;
   border-radius: 0;
   z-index: 20;
 }
@@ -576,6 +579,21 @@
 }
 .appBar .menuButton:hover {
   background: #444;
+}
+.githubLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 5px;
+  color: #ccc;
+}
+.githubLink:hover {
+  background: #333;
+  color: white;
 }
 @media (max-width: 991px) {
   .desktopToggle {
