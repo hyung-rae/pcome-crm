@@ -211,78 +211,57 @@
   margin: 7px 0 0;
   line-height: 1.6;
 }
-.badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  white-space: nowrap;
-  padding: 6px 9px;
-  border: 1px solid #e8e8e8;
-  border-radius: 6px;
-  color: #565656;
+/* Weekly class charts: two cards side by side, stacked below 992px. */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-.badge > span {
-  width: 5px;
-  height: 5px;
-  background: #777;
-  border-radius: 50%;
+.chartCard {
+  min-width: 0;
+  padding: 20px 24px 24px;
 }
-.empty {
-  min-height: 350px;
-  padding: 65px 24px;
+.chartCard + .chartCard {
+  border-left: 1px solid #eee;
+}
+.chartCard h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #28262b;
+}
+.chartMessage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  padding: 56px 24px;
   text-align: center;
 }
-.emptyIcon {
-  width: 56px;
-  height: 56px;
-  background: #fff0eb;
-  color: var(--primary);
-  display: grid;
-  place-content: center;
-  border-radius: 15px;
-  margin-bottom: 23px;
-  border: 1px solid #f9dcd2;
-}
-.empty h3 {
-  font-size: 18px;
-  letter-spacing: -0.5px;
-  margin: 0 0 12px;
-  line-height: 1.6;
-}
-.empty p {
+.chartMessage p {
+  margin: 0;
   font-size: 13px;
   color: #565656;
-  line-height: 1.8;
-  margin: 0;
 }
-.emptyNote {
-  font-size: 11px;
-  color: #686868;
-  margin-top: 20px;
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.panelFooter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: #fcfcfc;
-  border-top: 1px solid #eee;
-  padding: 15px 20px;
-  font-size: 11px;
-  color: #565656;
-  text-align: center;
+@media (max-width: 991px) {
+  .charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .chartCard + .chartCard {
+    border-left: 0;
+    border-top: 1px solid #eee;
+  }
 }
-.footerDot {
-  width: 4px;
-  height: 4px;
-  background: #d63e20;
-  border-radius: 50%;
-  flex-shrink: 0;
+@media (max-width: 575px) {
+  .chartCard {
+    padding: 16px 16px 20px;
+  }
 }
 .pageFooter {
   display: flex;
@@ -372,25 +351,6 @@
   }
   .sectionHeader h2 {
     font-size: 15px;
-  }
-  .empty {
-    padding: 44px 20px;
-    min-height: 320px;
-  }
-  .empty h3 {
-    font-size: 16px;
-    max-width: 240px;
-  }
-  .empty p {
-    font-size: 12px;
-    max-width: 230px;
-  }
-  .emptyNote {
-    font-size: 10px;
-  }
-  .panelFooter {
-    font-size: 10px;
-    padding: 14px 12px;
   }
   .pageFooter {
     font-size: 9px;

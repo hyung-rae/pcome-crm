@@ -11,7 +11,7 @@ PCOME CRM 웹앱의 개발 기반, 단일 지점 직원 인증·관리자 관리
 ## 현재 구현
 
 - Next.js App Router + TypeScript
-- Mantine 공통 Provider, 브랜드 오렌지 테마, 반응형 대시보드 빈 상태
+- Mantine 공통 Provider, 브랜드 오렌지 테마, 반응형 대시보드와 이번 주 수업 현황 차트(요일별·강사별)
 - 차콜 앱 프레임·공통 상단바와 고정 토글, PC LNB 및 모바일 Drawer 메뉴
 - 헤더 우측 로그인 계정·권한 배지·로그아웃, 브랜드 P 파비콘
 - 작은 버튼 패딩·16px 메뉴 아이콘, 닫기 버튼 hover 대비

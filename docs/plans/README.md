@@ -15,3 +15,4 @@
 - [검증 비용 개선](verification-efficiency.md) — 테스트 설정 분리·검증 완료, 완료
 
 - [그룹수업 시간표 관리](class-schedule.md) — 완료
+- [대시보드 수업 차트](dashboard-charts.md) — 완료

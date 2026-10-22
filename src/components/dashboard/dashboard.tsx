@@ -7,13 +7,14 @@ import { LogoutButton } from "@/components/auth/auth-forms";
 import Link from "next/link";
 import { Drawer, Tooltip } from "@mantine/core";
 import { RoleBadge } from "@/components/common/role-badge";
+import { ClassCharts } from "./class-charts";
 import styles from "./dashboard.module.css";
 
 function Icon({
   kind,
   size = 16,
 }: {
-  kind: "grid" | "users" | "menu" | "chart" | "collapse" | "calendar";
+  kind: "grid" | "users" | "menu" | "collapse" | "calendar";
   size?: number;
 }) {
   return (
@@ -50,12 +51,8 @@ function Icon({
           <rect x="3" y="5" width="18" height="16" rx="2" />
           <path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2" />
         </>
-      ) : kind === "menu" ? (
-        <path d="M4 6h16M4 12h16M4 18h16" />
       ) : (
-        <>
-          <path d="M4 4v16h16M9 15v-3M14 15V8M19 15V5" />
-        </>
+        <path d="M4 6h16M4 12h16M4 18h16" />
       )}
     </svg>
   );
@@ -249,37 +246,7 @@ export function Dashboard({
             {children ? (
               <div style={{ marginTop: 16 }}>{children}</div>
             ) : (
-              <section
-                className={styles.overview}
-                aria-labelledby="overview-title"
-              >
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <h2 id="overview-title">워크스페이스 현황</h2>
-                    <p>연결된 업무 데이터를 이곳에서 확인할 수 있습니다.</p>
-                  </div>
-                  <span className={styles.badge}>
-                    <span />
-                    데이터 연결 전
-                  </span>
-                </div>
-                <div className={styles.empty}>
-                  <div className={styles.emptyIcon}>
-                    <Icon kind="chart" size={24} />
-                  </div>
-                  <h3>아직 연결된 업무 데이터가 없습니다</h3>
-                  <p>
-                    업무 데이터가 연결되면 주요 현황을 한눈에 볼 수 있습니다.
-                  </p>
-                  <span className={styles.emptyNote}>
-                    새로운 업무를 위한 공간이 준비되어 있어요.
-                  </span>
-                </div>
-                <div className={styles.panelFooter}>
-                  <span className={styles.footerDot} />
-                  실제 데이터가 연결되면 현황이 표시됩니다.
-                </div>
-              </section>
+              <ClassCharts />
             )}
             <footer className={styles.pageFooter}>
               <span>© PCOME CRM</span>

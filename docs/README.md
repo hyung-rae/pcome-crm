@@ -32,6 +32,7 @@
 | staff-ui | 관리자 관리 UI 개선 | [기획](planning/staff-ui.md) | [계획](plans/staff-ui.md) | [직원 관리](features/admin-auth.md) | 완료 |
 | loading-staff-controls | 로딩·직원 목록 조작 개선 | [기획](planning/loading-staff-controls.md) | [계획](plans/loading-staff-controls.md) | [직원 관리](features/admin-auth.md) · [대시보드](features/dashboard-ui.md) | 완료 |
 | class-schedule | 그룹수업 시간표 관리 | [기획](planning/class-schedule.md) | [계획](plans/class-schedule.md) | [기능 문서](features/class-schedule.md) | 완료 |
+| dashboard-charts | 대시보드 수업 차트 | [기획](planning/dashboard-charts.md) | [계획](plans/dashboard-charts.md) | [대시보드](features/dashboard-ui.md) | 완료 |
 
 현재 공통 기반은 [시스템 구조](architecture/system.md)에 기록되어 있습니다.
 

@@ -1,12 +1,14 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
-test("대시보드는 빈 상태와 관리자 메뉴를 표시한다", async ({ page }) => {
+test("대시보드는 이번 주 수업 현황과 관리자 메뉴를 표시한다", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "대시보드." })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "아직 연결된 업무 데이터가 없습니다" }),
+    page.getByRole("heading", { name: "이번 주 수업 현황" }),
   ).toBeVisible();
+  // Charts, the empty message or a load error replace the loading skeleton.
+  await expect(page.getByRole("status", { name: "수업 현황을 불러오는 중입니다." })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "관리자 관리" })).toBeVisible();
   await expect(page.getByRole("link", { name: "대시보드" })).toHaveAttribute(
     "aria-current",
@@ -19,7 +21,7 @@ for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { name: "워크스페이스 현황" }),
+      page.getByRole("heading", { name: "이번 주 수업 현황" }),
     ).toBeVisible();
     expect(
       await page.evaluate(
@@ -79,7 +81,7 @@ test("페이지 로딩 중 콘솔·네트워크 오류가 없다", async ({ page
   });
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "워크스페이스 현황" }),
+    page.getByRole("heading", { name: "이번 주 수업 현황" }),
   ).toBeVisible();
   await page.getByRole("link", { name: "대시보드" }).focus();
   expect(errors).toEqual([]);
@@ -186,7 +188,8 @@ test("LNB 애니메이션은 본문과 함께 움직이고 동작 줄이기 설�
 test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된다", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 650 });
+  // Short enough that the class charts panel overflows the work area.
+  await page.setViewportSize({ width: 1440, height: 480 });
   await page.goto("/");
   const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
   const before = await bar.boundingBox();
@@ -242,7 +245,15 @@ for (const width of [1440, 768, 390]) {
       if (new URL(request.url()).pathname === "/login" && request.failure()?.errorText === "net::ERR_ABORTED") return;
       errors.push(request.url());
     });
+    // Logout's replace+refresh remounts the dashboard once more, so its class-count request may
+    // answer 401 on the way to /login. Only that request is tolerated; any other 401 still fails.
+    let loggedOut = false;
+    page.on("response", response => {
+      const path = new URL(response.url()).pathname;
+      if (response.status() === 401 && !(loggedOut && path === "/api/classes/sessions")) errors.push(`401 ${path}`);
+    });
     page.on("console", message => {
+      if (loggedOut && message.text().includes("401 (Unauthorized)")) return;
       if (message.type() === "error" && !message.text().includes("503 (Service Unavailable)")) errors.push(message.text());
     });
     await page.setViewportSize({ width, height: 900 });
@@ -275,6 +286,7 @@ for (const width of [1440, 768, 390]) {
     expect(calls).toBe(1);
     await page.screenshot({ path: `test-results/account-error-${width}.png`, fullPage: true });
     await page.unroute("**/api/auth/logout");
+    loggedOut = true;
     await logout.click();
     await expect(page).toHaveURL(/\/login$/);
     expect(errors).toEqual([]);
