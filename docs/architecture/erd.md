@@ -1,6 +1,6 @@
 # 직원 및 회원 기본정보 ERD
 
-- 상태: 사용자 확인 완료 — staff 적용, members 미적용
+- 상태: 사용자 확인 완료 — staff·수업 시간표 적용, members 미적용
 - 최종 갱신: 2026-10-22
 - 관련 문서: [로그인 기획](../planning/admin-auth.md), [Supabase 설정](supabase.md)
 
@@ -80,3 +80,53 @@ AUTH_USERS는 Supabase가 관리하는 auth.users의 개념 표시다. 직접 �
 ## 서브관리자 삭제 연동 (2026-10-22)
 
 관리자가 서브관리자를 삭제할 수 있게 됐다. Auth 삭제 전 staff를 비활성화하고 세션을 폐기한 뒤 auth.users를 삭제하면 현재 staff.id FK의 ON DELETE CASCADE가 직원 프로필도 제거한다. 스키마 변경은 없다. members의 created_by 등 미래 업무 이력 참조는 SET NULL 등의 보존 정책을 별도로 확정해야 하며 이번 삭제에 회원 데이터는 포함되지 않는다.
+
+## 그룹수업 시간표 (2026-10-22)
+
+[수업 시간표 기능](../features/class-schedule.md)에서 아래 테이블을 추가했다. 마이그레이션: `20261022085919_create_class_schedule`. members와는 아직 관계가 없다.
+
+```mermaid
+erDiagram
+    STAFF ||--o{ CLASS_SERIES : "강사(선택)"
+    STAFF ||--o{ CLASS_SESSIONS : "강사(선택)"
+    CLASS_TYPES ||--o{ CLASS_SERIES : "수업 종류"
+    CLASS_TYPES ||--o{ CLASS_SESSIONS : "수업 종류"
+    CLASS_SERIES o|--o{ CLASS_SESSIONS : "반복 회차"
+
+    STAFF {
+        boolean is_instructor "강사 여부, 권한 아님"
+    }
+    CLASS_TYPES {
+        uuid id PK
+        text name "사용 중 종류끼리 유일"
+        int default_capacity
+        int default_duration_minutes
+        text color "고정 8종"
+        boolean is_active
+    }
+    CLASS_SERIES {
+        uuid id PK
+        smallint_array weekdays "ISO 1~7"
+        time start_time
+        int duration_minutes
+        int capacity
+        date start_date
+        date end_date "null이면 무기한"
+        date cancelled_from "이후 전체 휴강"
+        date generated_until "회차 생성 완료일"
+    }
+    CLASS_SESSIONS {
+        uuid id PK
+        uuid series_id FK "단발이면 null"
+        date occurrence_date "반복 원래 날짜"
+        timestamptz starts_at
+        timestamptz ends_at
+        int capacity
+        text status "scheduled·cancelled·deleted"
+        boolean is_modified
+    }
+```
+
+- 강사·작성자 FK는 `ON DELETE SET NULL`, 수업 종류 FK는 `RESTRICT`, 회차의 반복 규칙 FK는 `CASCADE`다.
+- 같은 강사의 정상 회차끼리 시간이 겹칠 수 없다(제외 제약). 회차는 오늘부터 1년 앞까지 미리 만든다. 이유는 [결정 기록](../decisions/class-schedule-storage.md)에 있다.
+- 직원 영구 삭제 시 수업 기록은 남고 강사만 비워진다. 앞에서 제안한 '업무 이력 참조는 SET NULL' 방향을 수업 테이블에 적용했다.

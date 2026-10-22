@@ -9,7 +9,7 @@ export default defineConfig({
   globalTeardown: "./tests/auth-teardown.ts",
   workers: 2,
   testDir: "./tests",
-  testIgnore: "**/password-validation.spec.ts",
+  testIgnore: ["**/password-validation.spec.ts", "**/class-validation.spec.ts"],
   fullyParallel: true,
   use: {
     baseURL,

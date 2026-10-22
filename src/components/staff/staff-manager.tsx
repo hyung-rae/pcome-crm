@@ -7,7 +7,8 @@ import { SuccessToast } from "@/components/common/success-toast";
 import { RoleBadge } from "@/components/common/role-badge";
 import styles from "./staff.module.css";
 
-type Edit = { row: StaffRow; action: "rename" | "reset" | "delete" };
+type Edit = { row: StaffRow; action: "rename" | "reset" | "delete" | "instructor" | "deactivate" };
+const DONE = { rename: "이름 변경 완료", reset: "비밀번호 재설정 완료", instructor: "강사 해제 완료", deactivate: "비활성화 완료" } as const;
 export function StaffManager() {
   const requestLock = useRef(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -106,12 +107,17 @@ export function StaffManager() {
           );
         return;
       }
-      await api(`/api/staff/${edit.row.id}`, "PATCH", {
-        ...body,
-        action: edit.action,
-      });
+      await api(
+        `/api/staff/${edit.row.id}`,
+        "PATCH",
+        edit.action === "instructor"
+          ? { action: "instructor", is_instructor: false }
+          : edit.action === "deactivate"
+            ? { action: "status", is_active: false }
+            : { ...body, action: edit.action },
+      );
       setEdit(null);
-      setMessage(edit.action === "rename" ? "이름 변경 완료" : "비밀번호 재설정 완료");
+      setMessage(DONE[edit.action]);
       await load();
     } catch (error) {
       if (edit.action === "delete") await load();
@@ -122,8 +128,35 @@ export function StaffManager() {
       setPending(false);
     }
   }
+  // Removing an instructor who still has future classes asks for confirmation first.
+  // An unknown count (null) is treated as possibly having classes.
+  const hasClasses = (row: StaffRow) => row.upcoming_sessions === null ? row.is_instructor : row.upcoming_sessions > 0;
+  function confirmRelease(row: StaffRow, action: "instructor" | "deactivate") {
+    setFormError("");
+    lastEditId.current = row.id;
+    setEdit({ row, action });
+  }
+  async function changeInstructor(row: StaffRow) {
+    if (pending || refreshing || requestLock.current) return;
+    if (row.is_instructor && hasClasses(row)) return confirmRelease(row, "instructor");
+    requestLock.current = true;
+    setPending(true);
+    setError("");
+    setMessage("");
+    try {
+      await api(`/api/staff/${row.id}`, "PATCH", { action: "instructor", is_instructor: !row.is_instructor });
+      setMessage(row.is_instructor ? "강사 해제 완료" : "강사 지정 완료");
+      if (!(await load())) setError("강사 여부는 변경됐지만 목록 갱신에 실패했습니다. 목록을 새로고침해주세요.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "강사 여부를 변경하지 못했습니다.");
+    } finally {
+      requestLock.current = false;
+      setPending(false);
+    }
+  }
   async function changeStatus(row: StaffRow) {
     if (pending || refreshing || requestLock.current || row.role !== "sub_admin") return;
+    if (row.is_active && hasClasses(row)) return confirmRelease(row, "deactivate");
     requestLock.current = true;
     setStatusId(row.id);
     setStatusError(null);
@@ -254,6 +287,7 @@ export function StaffManager() {
                     <th>이름</th>
                     <th>이메일</th>
                     <th>권한</th>
+                    <th>강사</th>
                     <th>상태</th>
                     <th>관리</th>
                   </tr>
@@ -264,6 +298,7 @@ export function StaffManager() {
                       <td>{row.name}</td>
                       <td>{row.email}</td>
                       <td><RoleBadge role={row.role} /></td>
+                      <td>{row.is_instructor ? <span className={styles.instructorBadge}>강사</span> : <span aria-label="강사 아님">—</span>}</td>
                       <td>
                         {row.role === "sub_admin" ? <>
                           <div className={styles.statusControl} aria-busy={statusId === row.id}>
@@ -277,7 +312,6 @@ export function StaffManager() {
                         </> : <span>{row.is_active ? "활성" : "비활성"}</span>}
                       </td>
                       <td>
-                        {row.role === "sub_admin" ? (
                           <Menu
                             withinPortal
                             position="bottom-end"
@@ -306,6 +340,7 @@ export function StaffManager() {
                               </Tooltip>
                             </Menu.Target>
                             <Menu.Dropdown>
+                              {row.role === "sub_admin" && <>
                               <Menu.Item
                                 onClick={() => {
                                   setFormError("");
@@ -325,6 +360,11 @@ export function StaffManager() {
                               >
                                 비밀번호 재설정
                               </Menu.Item>
+                              </>}
+                              <Menu.Item onClick={() => void changeInstructor(row)}>
+                                {row.is_instructor ? "강사 해제" : "강사 지정"}
+                              </Menu.Item>
+                              {row.role === "sub_admin" && <>
                               <Menu.Divider />
                               <Menu.Item
                                 color="red"
@@ -336,11 +376,9 @@ export function StaffManager() {
                               >
                                 삭제
                               </Menu.Item>
+                              </>}
                             </Menu.Dropdown>
                           </Menu>
-                        ) : (
-                          "—"
-                        )}
                       </td>
                     </tr>
                   ))}
@@ -364,7 +402,11 @@ export function StaffManager() {
             ? "서브관리자 삭제"
             : edit?.action === "rename"
               ? "직원 이름 수정"
-              : "임시 비밀번호 설정"
+              : edit?.action === "instructor"
+                ? "강사 해제"
+                : edit?.action === "deactivate"
+                  ? "서브관리자 비활성화"
+                  : "임시 비밀번호 설정"
         }
         closeButtonProps={{ "aria-label": "창 닫기", disabled: pending }}
         closeOnClickOutside={!pending}
@@ -384,6 +426,18 @@ export function StaffManager() {
                 로그인 계정과 직원 정보가 영구 삭제되며 복구할 수 없습니다. 기존
                 로그인 세션도 종료됩니다.
               </p>
+            )}
+            {(edit.action === "delete" || edit.action === "instructor" || edit.action === "deactivate") &&
+              hasClasses(edit.row) && (
+                <p className={styles.message} role="note">
+                  {edit.row.upcoming_sessions === null
+                    ? "앞으로 맡은 수업 수를 확인하지 못했습니다. 맡은 수업이 있다면"
+                    : `앞으로 맡은 수업 ${edit.row.upcoming_sessions}회가`}{" "}
+                  &apos;강사 미정&apos;으로 바뀝니다. 수업은 삭제되지 않으며 시간표에서 다른 강사를 지정할 수 있습니다.
+                </p>
+              )}
+            {edit.action === "deactivate" && (
+              <p className={styles.message}>비활성화하면 다음 요청부터 업무 접근이 차단됩니다.</p>
             )}
             {edit.action === "rename" && (
               <TextInput
@@ -425,7 +479,7 @@ export function StaffManager() {
                 color={edit.action === "delete" ? "red" : undefined}
                 loading={pending}
               >
-                {edit.action === "delete" ? "삭제" : "확인"}
+                {edit.action === "delete" ? "삭제" : edit.action === "instructor" ? "강사 해제" : edit.action === "deactivate" ? "비활성화" : "확인"}
               </Button>
             </div>
           </form>

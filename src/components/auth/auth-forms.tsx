@@ -22,7 +22,8 @@ export async function api(path: string, method: string, body?: unknown) {
     throw new Error("서버 응답을 확인하지 못했습니다. 다시 시도해주세요.");
   }
   if (!response.ok)
-    throw new Error(result.error || "요청을 처리하지 못했습니다.");
+    // Keep extra error details (e.g. schedule conflicts) for callers that show them.
+    throw Object.assign(new Error(result.error || "요청을 처리하지 못했습니다."), { data: result });
   return result;
 }
 export function LoginForm({ accessDenied }: { accessDenied: boolean }) {

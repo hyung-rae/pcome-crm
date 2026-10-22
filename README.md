@@ -1,7 +1,7 @@
 # PCOME CRM
 
 헬스장 단일 지점의 직원 인증·관리와 회원 관리 업무를 위한 웹앱입니다.
-현재 직원 인증·관리자 관리와 대시보드 기반까지 구현했으며, 회원 업무 기능은 아직 구현하지 않았습니다.
+현재 직원 인증·관리자 관리, 대시보드 기반, 그룹수업 시간표까지 구현했으며, 회원 업무 기능은 아직 구현하지 않았습니다.
 
 운영 주소: [pcome-crm.vercel.app](https://pcome-crm.vercel.app/)
 
@@ -13,12 +13,13 @@
 | 접근 제어 | 활성 직원만 업무 화면 접근, 관리자만 직원 관리 가능. 서버·API·DB RLS에서 권한 검사 |
 | 비밀번호 변경 | 현재 비밀번호 확인, 최초·임시 비밀번호 로그인 후 변경 강제 |
 | 직원 관리 | 관리자 계정으로 서브관리자 생성·이름 수정·비활성화/재활성화·임시 비밀번호 재설정·영구 삭제 |
+| 그룹수업 시간표 | `/classes`에서 수업 종류 관리, 단발·매주 반복 수업 등록, 주간 그리드·모바일 목록, 이 회차만/이후 전체 수정·휴강·삭제, 같은 강사 시간 겹침 차단. 관리자가 직원에게 강사 표시 |
 | 대시보드 | 업무 데이터 연결 전 빈 상태, 로그인 계정·역할 표시, PC 접이식 메뉴·모바일 Drawer |
 | UI | Mantine 공통 테마, 반응형 화면, 직원 목록 새로고침·행별 관리 메뉴, 처리 상태·성공 알림 |
 
-회원 정보·상품·회원권·결제 기능과 관련 테이블, 공개 회원가입, 이메일 비밀번호 복구·SMTP는 미구현입니다.
+회원 정보·상품·회원권·결제 기능과 관련 테이블, 회원 수업 예약·출석, 공개 회원가입, 이메일 비밀번호 복구·SMTP는 미구현입니다.
 관리자 추가·권한 승격·관리자 삭제 UI는 제공하지 않습니다. 직원 데이터는 `public.staff`, 이메일·비밀번호는 Supabase Auth가 관리합니다.
-자세한 정책은 [직원 인증·관리](docs/features/admin-auth.md), [대시보드](docs/features/dashboard-ui.md)를 참고하세요.
+자세한 정책은 [직원 인증·관리](docs/features/admin-auth.md), [그룹수업 시간표](docs/features/class-schedule.md), [대시보드](docs/features/dashboard-ui.md)를 참고하세요.
 
 ## 개발 환경 및 시작
 
@@ -89,7 +90,7 @@ node --env-file=.env.local scripts/bootstrap-admin.mjs 'admin@example.com' '관�
 |---|---|
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Next.js 타입 생성 + TypeScript 검사 |
-| `npm run test:unit` | 비밀번호 검증 경계값 6개. 환경변수·브라우저·DB 불필요 |
+| `npm run test:unit` | 비밀번호 검증 경계값·수업 날짜·입력 검증(14개). 환경변수·브라우저·DB 불필요 |
 | `npm run test:e2e` | 실제 Supabase 연동 인증·직원 관리·권한·반응형 UI 검증 |
 | `npm run build` | 운영 빌드 |
 | `npm start` | 빌드한 운영 서버 실행 |

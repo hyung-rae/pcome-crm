@@ -13,7 +13,7 @@ export async function PATCH(
     await requireStaff({ admin: true });
     const id = uuid((await params).id);
     const admin = createAdminClient();
-    // Updates always constrain role, including against direct/forged requests.
+    // Except for the instructor flag, updates always constrain role, including against direct/forged requests.
     if (body.action === "reset") {
       const password = passwordField(body);
       const { data, error } = await admin
@@ -37,6 +37,20 @@ export async function PATCH(
       return json({
         message: "임시 비밀번호를 설정하고 기존 세션을 종료했습니다.",
       });
+    }
+    // The instructor flag grants no permission, so it applies to every role including self.
+    if (body.action === "instructor") {
+      if (typeof body.is_instructor !== "boolean")
+        throw new AppError("잘못된 변경 요청입니다.");
+      const { data, error } = await admin
+        .from("staff")
+        .update({ is_instructor: body.is_instructor })
+        .eq("id", id)
+        .select("id")
+        .maybeSingle();
+      if (error) throw new AppError("강사 여부를 변경하지 못했습니다.", 503);
+      if (!data) throw new AppError("변경할 수 없는 계정입니다.", 404);
+      return json({ message: "강사 여부를 변경했습니다." });
     }
     let update;
     if (body.action === "rename")

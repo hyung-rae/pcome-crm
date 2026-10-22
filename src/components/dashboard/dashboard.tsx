@@ -13,7 +13,7 @@ function Icon({
   kind,
   size = 16,
 }: {
-  kind: "grid" | "users" | "menu" | "chart" | "collapse";
+  kind: "grid" | "users" | "menu" | "chart" | "collapse" | "calendar";
   size?: number;
 }) {
   return (
@@ -44,6 +44,11 @@ function Icon({
         <>
           <rect x="3" y="4" width="18" height="16" rx="2" />
           <path d="M9 4v16M16 9l-3 3 3 3" />
+        </>
+      ) : kind === "calendar" ? (
+        <>
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2" />
         </>
       ) : kind === "menu" ? (
         <path d="M4 6h16M4 12h16M4 18h16" />
@@ -97,6 +102,19 @@ function Navigation({
             <Icon kind="grid" />
             <span className={styles.navText}>대시보드</span>
             {pathname === "/" && <span className={styles.activeDot} />}
+          </Link>
+        </Tooltip>
+        <Tooltip label="수업 시간표" disabled={!collapsed} position="right">
+          <Link
+            href="/classes"
+            onClick={onNavigate}
+            aria-label="수업 시간표"
+            aria-current={pathname === "/classes" ? "page" : undefined}
+            className={pathname === "/classes" ? styles.active : styles.navLink}
+          >
+            <Icon kind="calendar" />
+            <span className={styles.navText}>수업 시간표</span>
+            {pathname === "/classes" && <span className={styles.activeDot} />}
           </Link>
         </Tooltip>
         {isAdmin && (

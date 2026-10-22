@@ -1,11 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync, rmSync } from "node:fs";
+import { sweepClassFixtures } from "./class-helpers";
 export default async function teardown() {
   const admin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!,
     { auth: { persistSession: false, autoRefreshToken: false } },
   );
+  await sweepClassFixtures(admin);
   try {
     const accounts = JSON.parse(
       readFileSync(`${process.env.PLAYWRIGHT_AUTH_DIR || "tests/.auth"}/accounts.json`, "utf8"),

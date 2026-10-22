@@ -16,11 +16,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## 프로젝트 빠른 파악
 
-- PCOME CRM은 헬스장 단일 지점의 CRM입니다. 현재 직원 인증·관리와 대시보드 기반을 구현했습니다. 설치·인수인계 안내는 [README](README.md), 최신 기능 상태는 [문서 색인](docs/README.md)과 관련 기능 문서를 참고합니다.
-- 구현됨: 이메일·비밀번호 로그인/로그아웃, 활성 직원 접근 제어, 관리자 전용 서브관리자 생성·이름 수정·활성 상태 변경·임시 비밀번호 재설정·영구 삭제, 최초·임시 비밀번호 변경 강제, 반응형 대시보드와 공통 메뉴·알림.
-- 미구현: 회원 정보·상품·회원권·결제와 해당 테이블, 공개 회원가입, 이메일 비밀번호 복구·SMTP. 관리자 추가·권한 승격·관리자 삭제 UI도 없습니다. 미구현 기능을 기존 동작으로 가정하지 않습니다.
+- PCOME CRM은 헬스장 단일 지점의 CRM입니다. 현재 직원 인증·관리, 대시보드 기반, 그룹수업 시간표를 구현했습니다. 설치·인수인계 안내는 [README](README.md), 최신 기능 상태는 [문서 색인](docs/README.md)과 관련 기능 문서를 참고합니다.
+- 구현됨: 이메일·비밀번호 로그인/로그아웃, 활성 직원 접근 제어, 관리자 전용 서브관리자 생성·이름 수정·활성 상태 변경·임시 비밀번호 재설정·영구 삭제, 최초·임시 비밀번호 변경 강제, 반응형 대시보드와 공통 메뉴·알림, 그룹수업 시간표(수업 종류·단발/반복 수업·주간 그리드·휴강·강사 겹침 차단, 관리자의 직원 강사 표시).
+- 미구현: 회원 정보·상품·회원권·결제와 해당 테이블, 회원 수업 예약·출석, 공개 회원가입, 이메일 비밀번호 복구·SMTP. 관리자 추가·권한 승격·관리자 삭제 UI도 없습니다. 미구현 기능을 기존 동작으로 가정하지 않습니다.
 - 직원 프로필은 `public.staff`, 이메일·비밀번호는 Supabase Auth에서 관리합니다. UI에서 메뉴를 숨기는 것만으로 권한 검증을 대신하지 않습니다. 서버·API·RLS의 기존 접근 제어를 함께 확인합니다.
-- 주요 경로: `/login`, `/password`, `/`, `/admin/staff`. 비로그인·비활성 직원은 업무 화면에 접근할 수 없고 비밀번호 변경 강제 상태는 업무 화면 진입 전에 처리합니다.
+- 주요 경로: `/login`, `/password`, `/`, `/classes`, `/admin/staff`. 비로그인·비활성 직원은 업무 화면에 접근할 수 없고 비밀번호 변경 강제 상태는 업무 화면 진입 전에 처리합니다.
 
 ## 개발 환경과 코드 위치
 
@@ -31,8 +31,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | 경로 | 역할 |
 |---|---|
 | `src/app/` | 페이지와 API Route Handlers |
-| `src/components/auth/`, `src/components/staff/`, `src/components/dashboard/` | 인증·직원 관리·대시보드 UI |
+| `src/components/auth/`, `src/components/staff/`, `src/components/dashboard/`, `src/components/classes/` | 인증·직원 관리·대시보드·수업 시간표 UI |
 | `src/lib/auth/` | 세션·권한·입력 검증·직원 생성 처리 |
+| `src/lib/classes/` | 수업 날짜 계산·입력 검증·RPC 호출 |
 | `src/lib/supabase/` | 공개 설정·SSR 쿠키 클라이언트·서버 전용 관리 클라이언트 |
 | `src/proxy.ts` | 세션 갱신과 쿠키 전달 |
 | `src/theme.ts`, `src/app/globals.css` | 공통 테마·스타일 |
@@ -62,7 +63,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - 검증 범위의 원문은 [작업 절차](docs/workflow.md)입니다. 다음 명령 설명이 변경 영향별 검증 기준을 대체하지 않습니다.
 - 정적 검사: `npm run lint`, `npm run typecheck`.
-- 순수 함수 테스트: `npm run test:unit`. 환경 파일·브라우저·DB 없이 비밀번호 검증 경계값을 확인합니다.
+- 순수 함수 테스트: `npm run test:unit`. 환경 파일·브라우저·DB 없이 비밀번호·수업 날짜·입력 검증 경계값을 확인합니다.
 - 운영 빌드: `npm run build`. 실행 환경에서 Turbopack 내부 포트 생성이 제한되면 `npm run build -- --webpack`을 사용합니다. 빌드 후 `npm start`로 실행합니다.
 - E2E: 테스트용 Supabase를 가리키는 `.env.local` 준비 → `npx playwright install chromium` → `npm run test:e2e`. 기본 Webpack 서버는 8888 포트이며 기존 서버는 `PLAYWRIGHT_BASE_URL`로 지정합니다.
 - E2E는 실제 임시 Auth 계정·staff 행을 생성·삭제합니다. 테스트 대상 프로젝트를 먼저 확인하고 운영 DB 대상으로 자동 실행하지 않습니다. 중단 후 잔여 계정·`tests/.auth/`를 확인하며 실제 직원 계정을 정리 대상으로 취급하지 않습니다. 동시 실행은 `PLAYWRIGHT_AUTH_DIR`와 `--output`을 분리합니다.

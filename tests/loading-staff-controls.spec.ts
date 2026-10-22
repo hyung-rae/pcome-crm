@@ -87,7 +87,8 @@ for (const width of [1440, 768, 390]) {
     await expect(refresh).toBeEnabled();
     await expect(toggle).not.toBeChecked();
     await row.getByRole("button", { name: /더보기/ }).click();
-    await expect(page.getByRole("menuitem")).toHaveCount(3);
+    await expect(page.getByRole("menuitem")).toHaveCount(4);
+    await expect(page.getByRole("menuitem", { name: "강사 지정" })).toBeVisible();
     await expect(page.getByRole("menuitem", { name: /비활성화|재활성화/ })).toHaveCount(0);
     await page.keyboard.press("Escape");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

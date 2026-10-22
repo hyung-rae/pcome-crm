@@ -27,5 +27,6 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 export const config = {
-  matcher: ["/", "/login", "/password", "/admin/:path*", "/api/:path*"],
+  // Every protected page must be listed so its session cookie is refreshed.
+  matcher: ["/", "/login", "/password", "/classes/:path*", "/admin/:path*", "/api/:path*"],
 };

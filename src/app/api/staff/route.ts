@@ -18,16 +18,32 @@ export async function GET() {
       .select("*")
       .order("created_at", { ascending: false });
     if (error) throw new AppError("직원 목록을 불러오지 못했습니다.", 503);
+    // Future sessions per instructor, shown as a warning before removing an instructor.
+    // If counting fails the staff list still loads and the count is reported as unknown (null).
+    const counts = await admin.rpc("class_upcoming_counts");
+    const upcoming = counts.error
+      ? null
+      : new Map(
+          (counts.data as { instructor_id: string; sessions: number }[]).map(
+            (row) => [row.instructor_id, Number(row.sessions)],
+          ),
+        );
     const rows = await Promise.all(
       data.map(async (staff) => {
         const { data: user, error } = await admin.auth.admin.getUserById(
           staff.id,
         );
+        // An account deleted while the list was loading is simply left out.
+        if (error?.status === 404) return null;
         if (error) throw new AppError("직원 정보를 불러오지 못했습니다.", 503);
-        return { ...staff, email: user.user.email ?? "" };
+        return {
+          ...staff,
+          email: user.user.email ?? "",
+          upcoming_sessions: upcoming ? (upcoming.get(staff.id) ?? 0) : null,
+        };
       }),
     );
-    return json({ staff: rows });
+    return json({ staff: rows.filter((row) => row !== null) });
   } catch (error) {
     return failure(error);
   }

@@ -2,6 +2,7 @@ import { request, type FullConfig } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import { randomBytes } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
+import { sweepClassFixtures } from "./class-helpers";
 
 export default async function setup(config: FullConfig) {
   const admin = createClient(
@@ -9,6 +10,7 @@ export default async function setup(config: FullConfig) {
     process.env.SUPABASE_SECRET_KEY!,
     { auth: { persistSession: false, autoRefreshToken: false } },
   );
+  await sweepClassFixtures(admin);
   const run = randomBytes(8).toString("hex");
   const password = "E2e1!" + randomBytes(7).toString("base64url");
   const accounts: Record<

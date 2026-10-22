@@ -95,3 +95,5 @@
 }
 /* The decorative track must not cover the interactive switch input. */
 .statusControl :global(.mantine-Switch-track) { pointer-events: none; }
+
+.instructorBadge { display: inline-flex; padding: 3px 7px; border-radius: 5px; background: #e9f2fd; color: #174e86; font-size: 11px; font-weight: 600; line-height: 1.4; }

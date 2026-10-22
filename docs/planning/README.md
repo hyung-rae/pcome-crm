@@ -9,3 +9,4 @@
 - [서브관리자 삭제](staff-delete.md) — 기획·작업계획 확정
 - [관리자 관리 UI 개선](staff-ui.md) — 확정, 생성 모달·더보기 메뉴·폼 크기 통일
 - [로딩 표시 및 직원 목록 조작 개선](loading-staff-controls.md) — 기획·계획 확정, 구현 완료
+- [그룹수업 시간표 관리](class-schedule.md) — 확정, 구현 완료

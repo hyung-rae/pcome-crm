@@ -6,3 +6,4 @@
 
 - [기본 대시보드 UI](dashboard-ui.md) — 완료
 - [로그인 및 관리자 관리](admin-auth.md) — 완료
+- [그룹수업 시간표 관리](class-schedule.md) — 완료

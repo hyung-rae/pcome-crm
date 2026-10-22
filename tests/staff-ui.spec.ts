@@ -54,13 +54,18 @@ for (const width of [1440, 768, 390]) {
     await page.screenshot({ path: `test-results/staff-create-${width}.png`, fullPage: true });
     await dialog.getByRole("button", { name: "취소" }).click();
     const more = page.getByRole("button", { name: "검증 직원 관리 더보기" });
-    await expect(page.getByRole("row").filter({ hasText: "admin@example.com" }).getByRole("button")).toHaveCount(0);
+    // Admin rows only offer the instructor flag, which grants no permission.
+    const adminRow = page.getByRole("row").filter({ hasText: "admin@example.com" });
+    await expect(adminRow.getByRole("button")).toHaveCount(1);
+    await adminRow.getByRole("button", { name: "검증 관리자 관리 더보기" }).click();
+    await expect(page.getByRole("menuitem")).toHaveText(["강사 지정"]);
+    await page.keyboard.press("Escape");
     await expect(more).not.toHaveText("더보기");
     expect((await more.boundingBox())!.width).toBe(32);
     expect((await more.locator("svg").boundingBox())!.width).toBe(16);
     await more.focus();
     await more.press("Enter");
-    await expect(page.getByRole("menuitem")).toHaveCount(3);
+    await expect(page.getByRole("menuitem")).toHaveCount(4);
     await page.keyboard.press("Escape");
     await expect(more).toBeFocused();
     await more.click();

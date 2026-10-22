@@ -1,7 +1,7 @@
 # Supabase 연결 설정
 
 - 최종 갱신: 2026-10-22
-- 상태: 앱 Auth·Data API 연동 및 staff 적용 완료
+- 상태: 앱 Auth·Data API 연동, staff·수업 시간표 적용 완료
 - 관련 기획: [로그인 및 관리자 관리](../planning/admin-auth.md)
 
 ## 프로젝트
@@ -32,3 +32,13 @@
 서브관리자 삭제 API는 기존 서버 관리 키·세션 폐기 트리거와 auth.users→staff FK를 재사용한다. 테스트에서 생성한 계정만 삭제하여 Auth·staff 동시 제거와 기존 토큰 접근 거부를 검증한다. 운영 계정을 테스트 삭제하지 않으며 별도 마이그레이션은 없다.
 
 2026-10-22 사용자 커밋 지시로 인증·직원 관리 구현을 최종 승인·완료 처리했다. 이전 확인 대기/미커밋 기록은 당시 검증 이력이다.
+
+## 수업 시간표 마이그레이션 (2026-10-22)
+
+- 사용자 승인 후 Supabase MCP `apply_migration`으로 `20261022085919_create_class_schedule`을 적용했다. 원격에 저장된 SQL의 MD5가 저장소 파일과 일치함을 확인했다.
+- 확장 `btree_gist` 1.7을 `extensions` 스키마에 설치했다.
+- 적용 후 확인: 새 테이블 3개 RLS 활성, `authenticated`는 SELECT만, `anon`은 권한 없음, RPC는 `service_role`만 실행 가능. 기존 staff 데이터는 그대로이고 `is_instructor` 기본값은 false다.
+- 보안 자문: 새 지적 없음(기존 Auth '유출 비밀번호 검사 꺼짐' 경고 1건 유지). 성능 자문은 INFO만 있다. 새 인덱스가 아직 쓰이지 않았다는 것과, `created_by`·`class_type_id` FK에 인덱스가 없다는 것이다. 수업 종류는 삭제하지 않고 직원 삭제도 드물어서, 단일 지점 규모에서는 그대로 둔다.
+- E2E는 같은 프로젝트에서 실행 태그가 붙은 수업 종류와 임시 강사 계정만 만들고 정리한다. 운영 데이터를 넣기 전에는 운영·테스트 프로젝트를 분리할 것을 권장한다.
+- 리뷰 수정 보정 마이그레이션 `20261022093926_fix_class_schedule_following`(함수만 교체, 테이블·데이터 변경 없음)을 사용자 승인 후 적용했다. 원격 SQL MD5가 저장소 파일과 일치하고, 새 함수 `class_drop_series`·바뀐 `class_fill_series`도 `service_role`만 실행할 수 있다. 보안 자문 새 지적 없음.
+- 로컬에 Postgres·Docker·Supabase CLI가 없어서, SQL은 Git 제외 경로 `.omc/research/class-schedule-pglite/`의 PGlite 정책 테스트로 사전 검증했다.

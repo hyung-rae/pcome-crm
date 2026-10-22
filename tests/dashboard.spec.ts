@@ -46,6 +46,8 @@ test("모바일 메뉴는 키보드·닫기·배경으로 닫고 포커스를 �
   await page.keyboard.press("Tab");
   await expect(dialog.getByRole("link", { name: "대시보드" })).toBeFocused();
   await page.keyboard.press("Tab");
+  await expect(dialog.getByRole("link", { name: "수업 시간표" })).toBeFocused();
+  await page.keyboard.press("Tab");
   await expect(dialog.getByRole("link", { name: "관리자 관리" })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(dialog.getByRole("button", { name: "메뉴 닫기" })).toBeFocused();

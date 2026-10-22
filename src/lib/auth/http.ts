@@ -8,7 +8,7 @@ export function json(data: unknown, status = 200) {
 }
 export function failure(error: unknown) {
   if (error instanceof AppError)
-    return json({ error: error.message }, error.status);
+    return json({ ...error.data, error: error.message }, error.status);
   // Do not serialize provider errors, request bodies or credentials.
   return json(
     {

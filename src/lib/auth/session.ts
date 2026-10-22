@@ -18,7 +18,7 @@ export async function getStaff() {
   const { data, error } = await client
     .from("staff")
     .select(
-      "id,name,role,is_active,must_change_password,credentials_reset_at,created_at,updated_at",
+      "id,name,role,is_active,is_instructor,must_change_password,credentials_reset_at,created_at,updated_at",
     )
     .eq("id", user.id)
     .maybeSingle();

@@ -5,3 +5,4 @@
 [전체 문서 색인](../README.md) · [문서 관리 절차](../workflow.md)
 
 - [직원 권한과 세션 검증](staff-auth-permissions.md) — 적용
+- [반복 수업 저장과 강사 겹침 보장](class-schedule-storage.md) — 적용
