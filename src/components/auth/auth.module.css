@@ -1,0 +1,104 @@
+.login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  background: #1d1d1d;
+}
+.card {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fff;
+  color: #28262b;
+}
+.brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #d63e20;
+  margin: 0 0 22px;
+}
+.card h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  letter-spacing: -1px;
+}
+.description {
+  font-size: 13px;
+  color: #565656;
+  line-height: 1.8;
+  margin: 0 0 24px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form > button {
+  align-self: flex-start;
+}
+.message {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #565656;
+  margin: 0;
+}
+.error {
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0;
+}
+.account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.account a {
+  color: #a82e18;
+}
+.password {
+  max-width: 460px;
+}
+.form :is(input, button, a):focus-visible {
+  outline: 3px solid #d63e20;
+  outline-offset: 3px;
+}
+@media (max-width: 575px) {
+  .card {
+    padding: 24px;
+  }
+  .account {
+    gap: 8px;
+  }
+}
+
+.loginInput {
+  height: var(--crm-form-control-height);
+  min-height: var(--crm-form-control-height);
+  font-size: 14px;
+  border-radius: 8px;
+}
+.loginForm input:focus-visible {
+  outline: none;
+}
+.loginInput:focus-within {
+  border-color: #d63e20;
+  outline: none;
+}
+.visibilityToggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.loginForm > button[type="submit"] {
+  height: var(--crm-form-control-height);
+  min-height: var(--crm-form-control-height);
+  margin-top: 8px;
+  font-size: 14px;
+}

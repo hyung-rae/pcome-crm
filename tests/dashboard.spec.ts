@@ -1,14 +1,13 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
-test("대시보드는 빈 상태와 비활성 관리자 메뉴를 표시한다", async ({ page }) => {
+test("대시보드는 빈 상태와 관리자 메뉴를 표시한다", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "대시보드." })).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "아직 연결된 업무 데이터가 없습니다" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "관리자 관리 준비 중" }),
-  ).toBeDisabled();
+  await expect(page.getByRole("link", { name: "관리자 관리" })).toBeVisible();
   await expect(page.getByRole("link", { name: "대시보드" })).toHaveAttribute(
     "aria-current",
     "page",
@@ -46,6 +45,8 @@ test("모바일 메뉴는 키보드·닫기·배경으로 닫고 포커스를 �
   await expect(dialog.getByRole("button", { name: "메뉴 닫기" })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(dialog.getByRole("link", { name: "대시보드" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dialog.getByRole("link", { name: "관리자 관리" })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(dialog.getByRole("button", { name: "메뉴 닫기" })).toBeFocused();
   await page.keyboard.press("Escape");
@@ -105,12 +106,22 @@ test("PC LNB 접기·펼치기로 본문이 넓어지고 메뉴 이름은 유지
   expect(expandButton!.x).toBe(toggle!.x);
   expect(expandButton!.y).toBe(toggle!.y);
   const lnbBox = (await page.locator("#desktop-lnb").boundingBox())!;
-  const logoBox = (await page.locator('#desktop-lnb [aria-hidden="true"]').filter({ hasText: "P" }).boundingBox())!;
-  expect(Math.abs(logoBox.x + logoBox.width / 2 - (lnbBox.x + lnbBox.width / 2))).toBeLessThan(1);
-  for (const item of [page.getByRole("link", { name: "대시보드" }), page.getByRole("button", { name: "관리자 관리 준비 중" })]) {
+  const logoBox = (await page
+    .locator('#desktop-lnb [aria-hidden="true"]')
+    .filter({ hasText: "P" })
+    .boundingBox())!;
+  expect(
+    Math.abs(logoBox.x + logoBox.width / 2 - (lnbBox.x + lnbBox.width / 2)),
+  ).toBeLessThan(1);
+  for (const item of [
+    page.getByRole("link", { name: "대시보드" }),
+    page.getByRole("link", { name: "관리자 관리" }),
+  ]) {
     const box = (await item.boundingBox())!;
     expect(box.width).toBe(box.height);
-    expect(Math.abs(box.x + box.width / 2 - (lnbBox.x + lnbBox.width / 2))).toBeLessThan(1);
+    expect(
+      Math.abs(box.x + box.width / 2 - (lnbBox.x + lnbBox.width / 2)),
+    ).toBeLessThan(1);
   }
   const after = await main.boundingBox();
   expect(after!.width).toBeGreaterThan(before!.width);
@@ -121,9 +132,7 @@ test("PC LNB 접기·펼치기로 본문이 넓어지고 메뉴 이름은 유지
     "aria-expanded",
     "true",
   );
-  await expect(
-    page.getByRole("button", { name: "관리자 관리 준비 중" }),
-  ).toBeDisabled();
+  await expect(page.getByRole("link", { name: "관리자 관리" })).toBeVisible();
 });
 
 test("모바일 메뉴가 완전히 열리면 브랜드 포인트가 유지된다", async ({
@@ -172,7 +181,9 @@ test("LNB 애니메이션은 본문과 함께 움직이고 동작 줄이기 설�
   await expect(lnb).toHaveCSS("transition-duration", "0s");
 });
 
-test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된다", async ({ page }) => {
+test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된다", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1440, height: 650 });
   await page.goto("/");
   const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
@@ -180,27 +191,90 @@ test("앱 상단바·LNB·본문 경계는 맞물리고 본문만 스크롤된�
   const lnb = await page.locator("#desktop-lnb").boundingBox();
   const contentHeader = await page.getByRole("banner").last().boundingBox();
   expect(Math.abs(before!.y + before!.height - lnb!.y)).toBeLessThan(1);
-  expect(Math.abs(before!.y + before!.height - contentHeader!.y)).toBeLessThan(1);
+  expect(Math.abs(before!.y + before!.height - contentHeader!.y)).toBeLessThan(
+    1,
+  );
   await page.getByRole("main").hover();
   await page.mouse.wheel(0, 500);
-  await expect.poll(async () => (await page.getByRole("main").boundingBox())!.y).toBeLessThan(contentHeader!.y);
+  await expect
+    .poll(async () => (await page.getByRole("main").boundingBox())!.y)
+    .toBeLessThan(contentHeader!.y);
   expect(await bar.boundingBox()).toEqual(before);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight)).toBe(true);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollHeight <= window.innerHeight,
+    ),
+  ).toBe(true);
 });
 
-test("헤더 우측 GitHub 링크와 브랜드 파비콘을 제공한다", async ({ page, request }) => {
+test("헤더 계정 조작과 브랜드 파비콘을 제공한다", async ({
+  page,
+  request,
+}) => {
   await page.goto("/");
   const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
-  const github = bar.getByRole("link", { name: "GitHub 저장소 열기 (새 탭)" });
-  await expect(github).toHaveAttribute("href", "https://github.com/hyung-rae/pcome-crm");
-  await expect(github).toHaveAttribute("target", "_blank");
-  const box = await github.boundingBox();
-  const header = await bar.boundingBox();
-  expect(header!.x + header!.width - box!.x - box!.width).toBeLessThanOrEqual(17);
+  await expect(bar.getByRole("link", { name: /GitHub/ })).toHaveCount(0);
+  await expect(bar).not.toContainText("WORKSPACE");
+  await expect(bar.getByRole("link", { name: /비밀번호 변경/ })).toHaveAttribute("href", "/password");
+  await expect(bar.getByRole("button", { name: "로그아웃", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "로그아웃", exact: true })).toHaveCount(1);
   const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
   await expect(icon).toHaveCount(1);
   const response = await request.get((await icon.getAttribute("href"))!);
   expect(response.ok()).toBe(true);
   expect(await response.text()).toContain("#F25634");
-  expect((await request.get('/favicon.ico')).ok()).toBe(true);
+  expect((await request.get("/favicon.ico")).ok()).toBe(true);
 });
+
+
+for (const width of [1440, 768, 390]) {
+  test(`${width}px 상단바 계정 배치·로그아웃 실패와 재시도`, async ({ page, baseURL }) => {
+    await page.context().clearCookies();
+    const accountData = JSON.parse(readFileSync(`${process.env.PLAYWRIGHT_AUTH_DIR || "tests/.auth"}/accounts.json`, "utf8")).admin;
+    const login = await page.request.post("/api/auth/login", { headers: { origin: new URL(baseURL!).origin }, data: { email: accountData.email, password: accountData.password } });
+    expect(login.ok()).toBe(true);
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    page.on("requestfailed", request => {
+      // Logout replace+refresh can cancel an obsolete login RSC navigation.
+      if (new URL(request.url()).pathname === "/login" && request.failure()?.errorText === "net::ERR_ABORTED") return;
+      errors.push(request.url());
+    });
+    page.on("console", message => {
+      if (message.type() === "error" && !message.text().includes("503 (Service Unavailable)")) errors.push(message.text());
+    });
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const bar = page.getByRole("banner", { name: "앱 공통 상단바" });
+    const account = bar.getByRole("link", { name: /비밀번호 변경/ });
+    const logout = bar.getByRole("button", { name: "로그아웃", exact: true });
+    await expect(account).toContainText("검증 admin");
+    expect((await bar.boundingBox())!.height).toBe(48);
+    const title = (await bar.locator("span").filter({ hasText: /^PCOME CRM$/ }).boundingBox())!;
+    const accountBox = (await account.boundingBox())!;
+    const logoutBox = (await logout.boundingBox())!;
+    expect(accountBox.x).toBeGreaterThanOrEqual(title.x + title.width);
+    expect(logoutBox.x).toBeGreaterThanOrEqual(accountBox.x + accountBox.width);
+    expect(logoutBox.x + logoutBox.width).toBeLessThanOrEqual(width);
+    await page.screenshot({ path: `test-results/account-header-${width}.png`, fullPage: true });
+    let calls = 0;
+    let release: (() => void) | undefined;
+    await page.route("**/api/auth/logout", async route => {
+      calls++;
+      await new Promise<void>(resolve => { release = resolve; });
+      await route.fulfill({ status: 503, json: { error: "연결 실패" } });
+    });
+    await logout.click();
+    await expect(logout).toBeDisabled();
+    await expect.poll(() => calls).toBe(1);
+    release!();
+    await expect(bar.getByRole("alert")).toHaveText("로그아웃을 다시 시도해주세요.");
+    await expect(logout).toBeEnabled();
+    expect(calls).toBe(1);
+    await page.screenshot({ path: `test-results/account-error-${width}.png`, fullPage: true });
+    await page.unroute("**/api/auth/logout");
+    await logout.click();
+    await expect(page).toHaveURL(/\/login$/);
+    expect(errors).toEqual([]);
+  });
+}

@@ -1,0 +1,97 @@
+.panel {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 24px;
+}
+.panel h2 {
+  font-size: 16px;
+  margin: 0 0 18px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+.form :global(.mantine-Input-input),
+.form > .footer > button {
+  height: var(--crm-form-control-height);
+  min-height: var(--crm-form-control-height);
+  font-size: 14px;
+}
+.form :global(.mantine-PasswordInput-visibilityToggle) svg {
+  width: 16px;
+  height: 16px;
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.toolbar h2 { margin: 0; }
+.table {
+  overflow: auto;
+  margin-top: 18px;
+}
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.table th,
+.table td {
+  padding: 14px 10px;
+  border-bottom: 1px solid #e8e8e8;
+  text-align: left;
+  white-space: nowrap;
+}
+.table th {
+  color: #565656;
+  font-weight: 500;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.message {
+  margin: 16px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.error {
+  color: #b42318;
+}
+@media (max-width: 575px) {
+  .panel {
+    padding: 20px;
+  }
+  .form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .form > div {
+    flex: auto;
+  }
+}
+
+.footer > button { padding-inline: 12px; }
+
+.statusControl { display: flex; align-items: center; gap: 8px; min-height: 32px; }
+.statusError { max-width: 220px; white-space: normal; font-size: 12px; line-height: 1.6; margin: 6px 0 0; }
+.skeleton { padding-block: 12px; }
+.skeletonRow { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr 32px; gap: 20px; padding-block: 20px; border-bottom: 1px solid #e8e8e8; }
+@media (prefers-reduced-motion: reduce) {
+  .skeleton :global(.mantine-Skeleton-root)::after { animation: none; }
+}
+/* The decorative track must not cover the interactive switch input. */
+.statusControl :global(.mantine-Switch-track) { pointer-events: none; }

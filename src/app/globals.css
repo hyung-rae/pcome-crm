@@ -1,3 +1,7 @@
+:root {
+  --crm-form-control-height: 40px;
+}
+
 html, body {
   min-height: 100%;
 }

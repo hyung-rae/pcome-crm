@@ -5,3 +5,5 @@
 [전체 문서 색인](../README.md) · [문서 관리 절차](../workflow.md)
 
 - [UI 공통 가이드](ui-guide.md) — 이후 UI 작업에 적용할 색상·크기·레이아웃·상태 기준
+- [직원 및 회원 ERD](erd.md) — 단일 지점 기본정보 설계 초안, DB 미적용
+- [Supabase 연결 설정](supabase.md) — 프로젝트와 환경 설정·검증 범위

@@ -1,0 +1,22 @@
+.toast {
+  position: fixed;
+  z-index: 400;
+  bottom: 16px;
+  right: 16px;
+  width: max-content;
+  min-width: min(240px, calc(100vw - 32px));
+  max-width: min(420px, calc(100vw - 32px));
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  color: #28262b;
+  border: 1px solid #e8e8e8;
+  border-left: 3px solid #d63e20;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px #28262b16;
+  font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.icon { color: #a82e18; flex-shrink: 0; margin-top: 5px; }
+.message { font-size: 13px; line-height: 1.7; padding-block: 2px; white-space: nowrap; }

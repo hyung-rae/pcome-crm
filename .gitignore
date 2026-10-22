@@ -42,5 +42,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Local test sessions and credentials
+/tests/.auth/
+/supabase/.temp/
+
 # Local Archify artifacts
 /.archify/
+
+!.env.example

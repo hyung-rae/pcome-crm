@@ -1,7 +1,7 @@
 # 시스템 구조
 
 최종 갱신: 2026-10-22
-상태: 기본 대시보드 UI 구현 완료
+상태: 기본 대시보드와 직원 인증·관리자 관리 구현
 
 ## 구성
 
@@ -34,10 +34,19 @@ Next.js App Router와 TypeScript를 사용합니다. UI는 Mantine이며 PostCSS
 
 ## 데이터 및 외부 연동
 
-데이터베이스, 인증, 외부 API와 영속 저장소는 아직 없습니다.
-기능 기획 확정 후 도입 시 이 문서와 관련 세부 문서를 갱신합니다.
+Supabase Auth·Postgres를 연결했다. public.staff에 직원 정보와 역할·활성 상태를 저장한다. src/proxy.ts에서 쿠키 세션을 갱신하고 각 보호 페이지·API에서 Auth getUser와 RLS를 통한 활성 직원 조회로 권한을 확인한다. 서버 관리 키는 src/lib/supabase/admin.ts에서만 사용한다. 회원·상품·결제 테이블은 아직 없다.
+
+[Supabase 설정](supabase.md), [ERD](erd.md), [직원 인증 기능](../features/admin-auth.md)에 실제 데이터·정책·코드 지도를 기록한다.
+
+생성된 .archify 소스 스냅샷과 tests/.auth는 앱 타입 검사·린트 대상에서 제외한다. 다른 작업이 만든 산출물 내용은 이 작업에서 수정하지 않는다.
 
 ## 관련 문서
 
 - [프로젝트 현황](../overview.md)
 - [실행·검증](../../README.md)
+
+관리자 관리 UI: 생성은 버튼에서 Modal로 열고 행별 조작은 Mantine Menu portal로 표시한다. 폼 오류와 목록 조회 오류는 별도 상태로 관리한다. `src/app/globals.css`의 `--crm-form-control-height: 40px`를 인증·직원 폼 CSS가 공유한다. 상세 동작은 [직원 인증·관리](../features/admin-auth.md), 검증은 [UI 개선 계획](../plans/staff-ui.md)을 참고한다.
+
+공통 상단바 계정 UI: `dashboard.tsx`가 staff 이름·역할을 표시하고 `/password` 링크·LogoutButton을 제공한다. 이전 GitHub/WORKSPACE 우측 장식과 내부 헤더 중복 계정 영역은 제거했다. 직원 더보기는 ActionIcon(32px)/SVG(16px)와 Tooltip/Menu 조합이다.
+
+로딩·공통 알림: `src/app/loading.tsx` → `components/common/page-loading.tsx`, 메뉴/계정 Link → `link-loading.tsx`(Next useLinkStatus). 공통 권한 배지는 `role-badge.tsx`, 직원 관리 성공 알림은 `success-toast.tsx` portal을 사용한다. 직원 상태 변경은 기존 PATCH API를 재사용하고 클라이언트가 요청 중 충돌·중복 제출을 차단한다. 서버 권한·DB 구조는 변경하지 않는다.

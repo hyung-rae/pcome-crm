@@ -571,29 +571,8 @@
   font-weight: 400;
   color: #ccc;
 }
-.appCaption {
-  margin-left: auto;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: #ccc;
-}
 .appBar .menuButton:hover {
   background: #444;
-}
-.githubLink {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  border-radius: 5px;
-  color: #ccc;
-}
-.githubLink:hover {
-  background: #333;
-  color: white;
 }
 @media (max-width: 991px) {
   .desktopToggle {
@@ -602,4 +581,72 @@
   .workspace {
     border-radius: 0;
   }
+}
+
+.navLink {
+  color: #ccc;
+  background: transparent;
+}
+.navigation a + a {
+  margin-top: 8px;
+}
+.navLink:hover {
+  background: #333;
+  color: #fff;
+}
+.account {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.accountLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: #eee;
+  text-decoration: none;
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 5px;
+}
+.accountLink:hover { background: #333; color: white; }
+.accountLink svg { flex-shrink: 0; }
+.accountName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+.accountRole { color: #bcbcbc; font-size: 11px; white-space: nowrap; }
+.appBar .logoutButton {
+  height: 30px;
+  padding-inline: 10px;
+  flex-shrink: 0;
+  color: #eee;
+  background: transparent;
+  border-color: #696969;
+}
+.appBar .logoutButton:hover,
+.appBar .logoutButton:active { color: white; background: #333; }
+.logoutError {
+  position: absolute;
+  top: 44px;
+  right: 16px;
+  padding: 8px 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 3px 10px #28262b12;
+  max-width: calc(100vw - 32px);
+}
+@media (max-width: 575px) {
+  .appBar { gap: 8px; padding-inline: 12px; }
+  .appTitle { flex-shrink: 0; font-size: 12px; }
+ .account { gap: 6px; }
+  .accountLink { gap: 5px; padding-inline: 2px; }
+  .accountName { max-width: 80px; }
+  .accountRole { display: none; }
 }
