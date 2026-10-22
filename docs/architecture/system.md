@@ -49,4 +49,4 @@ Supabase Auth·Postgres를 연결했다. public.staff에 직원 정보와 역할
 
 공통 상단바 계정 UI: `dashboard.tsx`가 staff 이름·역할을 표시하고 `/password` 링크·LogoutButton을 제공한다. 이전 GitHub/WORKSPACE 우측 장식과 내부 헤더 중복 계정 영역은 제거했다. 직원 더보기는 ActionIcon(32px)/SVG(16px)와 Tooltip/Menu 조합이다.
 
-로딩·공통 알림: `src/app/loading.tsx` → `components/common/page-loading.tsx`, 메뉴/계정 Link → `link-loading.tsx`(Next useLinkStatus). 공통 권한 배지는 `role-badge.tsx`, 직원 관리 성공 알림은 `success-toast.tsx` portal을 사용한다. 직원 상태 변경은 기존 PATCH API를 재사용하고 클라이언트가 요청 중 충돌·중복 제출을 차단한다. 서버 권한·DB 구조는 변경하지 않는다.
+이동·공통 알림: 페이지 이동은 Next Link 기본 동작을 사용하고 별도 로딩 UI·필터를 표시하지 않는다. 페이지 전용 loading 파일·LinkLoading과 관련 CSS는 제거했으며 직원 목록 조회의 스켈레톤·새로고침 로딩은 유지한다. 공통 권한 배지는 `role-badge.tsx`, 직원 관리 성공 알림은 `success-toast.tsx` portal을 사용한다. 직원 상태 변경은 기존 PATCH API를 재사용하고 클라이언트가 요청 중 충돌·중복 제출을 차단한다. 서버 권한·DB 구조는 변경하지 않는다.

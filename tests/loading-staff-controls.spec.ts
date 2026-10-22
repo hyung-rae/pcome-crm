@@ -108,20 +108,6 @@ test("최초 조회 실패는 빈 목록과 구분하며 재시도할 수 있다
   await expect(page.getByRole("region", { name: "직원 관리" }).getByRole("alert")).toHaveCount(0);
 });
 
-test("느린 페이지 이동에는 로딩 표시가 보이고 완료 후 해제된다", async ({ page }) => {
-  await page.goto("/");
-  let release: (() => void) | undefined;
-  await page.route("**/admin/staff?*", async route => {
-    await new Promise<void>(resolve => { release = resolve; });
-    await route.continue();
-  });
-  await page.getByRole("link", { name: "관리자 관리", exact: true }).click();
-  await expect(page.getByText("화면을 불러오는 중입니다.").first()).toBeVisible();
-  await expect.poll(() => !!release).toBe(true);
-  release!();
-  await expect(page.getByRole("heading", { name: "관리자 관리." })).toBeVisible();
-  await expect(page.getByText("화면을 불러오는 중입니다.")).toHaveCount(0);
-});
 
 
 test("조회 오류 후 생성 성공으로 복구하면 이전 조회 오류가 해제된다", async ({ page }) => {

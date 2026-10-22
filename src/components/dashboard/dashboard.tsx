@@ -7,7 +7,6 @@ import { LogoutButton } from "@/components/auth/auth-forms";
 import Link from "next/link";
 import { Drawer, Tooltip } from "@mantine/core";
 import { RoleBadge } from "@/components/common/role-badge";
-import { LinkLoading } from "@/components/common/link-loading";
 import styles from "./dashboard.module.css";
 
 function Icon({
@@ -90,12 +89,11 @@ function Navigation({
         <Tooltip label="대시보드" disabled={!collapsed} position="right">
           <Link
             href="/"
+            onClick={onNavigate}
             aria-label="대시보드"
             aria-current={pathname === "/" ? "page" : undefined}
             className={pathname === "/" ? styles.active : styles.navLink}
-            onClick={onNavigate}
           >
-            <LinkLoading />
             <Icon kind="grid" />
             <span className={styles.navText}>대시보드</span>
             {pathname === "/" && <span className={styles.activeDot} />}
@@ -105,14 +103,13 @@ function Navigation({
           <Tooltip label="관리자 관리" disabled={!collapsed} position="right">
             <Link
               href="/admin/staff"
+              onClick={onNavigate}
               aria-label="관리자 관리"
               aria-current={pathname === "/admin/staff" ? "page" : undefined}
               className={
                 pathname === "/admin/staff" ? styles.active : styles.navLink
               }
-              onClick={onNavigate}
             >
-              <LinkLoading />
               <Icon kind="users" />
               <span className={styles.navText}>관리자 관리</span>
               {pathname === "/admin/staff" && (
@@ -187,7 +184,6 @@ export function Dashboard({
                 </svg>
                 <span className={styles.accountName}>{staff.name}</span>
                 <span className={styles.accountRole}><RoleBadge role={staff.role} /></span>
-                <LinkLoading />
               </Link>
             </Tooltip>
             <LogoutButton className={styles.logoutButton} errorClassName={styles.logoutError} />
