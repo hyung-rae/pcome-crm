@@ -3,7 +3,15 @@
 헬스장 단일 지점의 직원 인증·관리와 회원 관리 업무를 위한 웹앱입니다.
 현재 직원 인증·관리자 관리, 대시보드 기반, 그룹수업 시간표까지 구현했으며, 회원 업무 기능은 아직 구현하지 않았습니다.
 
-운영 주소: [pcome-crm.vercel.app](https://pcome-crm.vercel.app/)
+## 서비스 종료 준비 및 보관 상태
+
+2026-10-23 기준 Supabase·Vercel 연동을 해제할 예정으로, 재연결을 위한 코드·DB 마이그레이션·설정 명세를 보관합니다. 이 문서 작업에서는 실제 연결 해제나 프로젝트 삭제를 수행하지 않았으며 원격 서비스 상태는 확인하지 않았습니다.
+
+**재개할 때는 [서비스 종료 준비 및 재연결 명세](docs/architecture/service-recovery.md)부터 확인하세요.** 테이블 4개의 전체 구조·제약·RLS·RPC·트리거, 마이그레이션 순서, 빈 DB 초기 설정과 Supabase·Vercel 재연결 절차를 정리했습니다.
+
+과거 배포 주소는 `https://pcome-crm.vercel.app/`입니다. 현재 운영 주소나 향후 재사용 가능한 주소로 보장하지 않습니다. 앱 코드는 Supabase 연결을 유지하므로 연결 해제 후 업무 화면은 사용할 수 없습니다. 아래 실행·배포 안내는 재개 시 적용할 절차입니다.
+
+사용자 결정에 따라 기존 계정·수업 데이터는 백업하지 않습니다. 코드와 DB 구조·설정만 보관하며 재개 시 빈 DB에서 첫 관리자부터 새로 등록합니다.
 
 ## 현재 구현된 기능
 
@@ -62,7 +70,10 @@ npm run dev
 
 1. 개발용 Supabase 프로젝트를 생성하고 위 3개 값을 설정합니다. 운영 DB와 분리된 프로젝트 사용을 권장합니다.
 2. Supabase Authentication에서 공개 회원가입을 끕니다. 계정은 관리자만 생성합니다.
-3. 새 DB에 [마이그레이션 SQL](supabase/migrations/20261022051344_create_staff_auth.sql)을 Supabase SQL Editor 등으로 적용합니다. `staff` 테이블·RLS·세션 관련 함수와 트리거를 함께 준비합니다. 기존 프로젝트에는 이미 적용되어 있으므로 재실행하지 마세요.
+3. 빈 DB에 다음 마이그레이션 전체를 순서대로 한 번씩 적용합니다. 테이블·RLS·함수·트리거·수업 겹침 제약까지 함께 준비합니다. 기존 DB는 적용 이력을 먼저 확인하고 초기 SQL을 재실행하지 마세요.
+   - [20261022051344_create_staff_auth.sql](supabase/migrations/20261022051344_create_staff_auth.sql)
+   - [20261022085919_create_class_schedule.sql](supabase/migrations/20261022085919_create_class_schedule.sql)
+   - [20261022093926_fix_class_schedule_following.sql](supabase/migrations/20261022093926_fix_class_schedule_following.sql)
 4. 연결과 공개 가입 차단을 확인합니다.
 
 ```sh
@@ -81,7 +92,7 @@ node --env-file=.env.local scripts/bootstrap-admin.mjs 'admin@example.com' '관�
 
 초기 로그인 정보는 소유자만 읽고 쓸 수 있는 `.env.admin-initial.local`에 저장됩니다.
 처음 로그인해 비밀번호를 변경한 후 해당 파일을 삭제하세요. 기존 관리자나 초기 정보 파일이 있으면 스크립트는 중단합니다.
-기존 운영 프로젝트에는 관리자가 생성되어 있으므로 다시 실행할 필요가 없습니다.
+새 DB에서 첫 관리자를 생성합니다. 이미 관리자가 있는 환경에서는 다시 실행하지 않습니다.
 관리자 비밀번호 분실은 Supabase 프로젝트 소유자가 Auth 사용자 관리에서 복구해야 합니다. 앱의 이메일 복구 기능은 없습니다.
 
 ## 검증 명령
@@ -126,7 +137,7 @@ npm ci → lint → typecheck → test:unit → build --webpack
 CI에는 Supabase 키나 Vercel 토큰을 등록할 필요가 없습니다. DB와 연결하는 E2E는 별도 로컬 검증이며 이 워크플로에 포함하지 않습니다.
 CI 빌드는 배포 가능 여부를 검사하며 실제 DB 연결·로그인 성공까지 보장하지 않습니다.
 
-Vercel의 Git 연동이 배포를 담당합니다. 운영 브랜치 `main` push는 Production, 다른 브랜치는 프로젝트의 Git 설정에 따라 Preview로 배포됩니다.
+서비스 재개 시 Vercel Git 연동으로 배포합니다. 연결이 활성화된 경우 운영 브랜치 `main` push는 Production, 다른 브랜치는 프로젝트의 Git 설정에 따라 Preview로 배포됩니다.
 새로 이 저장소를 가져간 경우 본인의 Vercel 프로젝트로 Git 저장소를 연결하고 다음을 설정하세요.
 
 - Framework: Next.js, Root Directory: 저장소 루트, Node.js: 24.x
